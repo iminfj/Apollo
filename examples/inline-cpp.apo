@@ -1,0 +1,74 @@
+
+code println -> cpp 
+{
+    # include <iostream>
+    # include <apollo\Acm\acm.hpp>
+    # include <string>
+    # include <vector>
+
+    using namespace std;
+
+    # define nullstr EMPTY_STR
+
+    std::string formatString(const std::string& format, const std::vector<std::string>& values)
+    {
+        std::string result = nullstr;
+        std::size_t startPos = 0;
+
+        while (true) {
+            std::size_t openBracePos = format.find('{', startPos);
+            if (openBracePos == std::string::npos) {
+                result += format.substr(startPos);
+                break;
+            }
+
+            std::size_t closeBracePos = format.find('}', openBracePos);
+            if (closeBracePos == std::string::npos) {
+                result += format.substr(startPos);
+                break;
+            }
+
+            result += format.substr(startPos, openBracePos - startPos);
+
+            std::string placeholder = format.substr(openBracePos + 1, closeBracePos - openBracePos - 1);
+            std::size_t index = std::stoul(placeholder);
+            if (index < values.size()) {
+                result += values[index];
+            }
+
+            startPos = closeBracePos + 1;
+        }
+
+        return result;
+    }
+
+    string rv = nullstr;
+
+    int main(int argc, char * argv[])
+    {
+        rv = ACMC::codes_rv_addr(argv[0]);
+
+        if (argc < 2) {
+            std::cout << "Usage: println(<format>, opt(<value1>, <value2>, ...))" << std::endl;
+            return 1;
+        }
+
+        std::string format = argv[1];
+        std::vector<std::string> values;
+
+        for (int i = 2; i < argc; ++i) {
+            values.push_back(argv[i]);
+        }
+
+        std::string result = formatString(format, values);
+        std::cout << result << std::endl;
+
+        return 0;
+    }
+}
+
+
+println('"Hello {0}{1}"', 'World', '!');
+
+println();
+

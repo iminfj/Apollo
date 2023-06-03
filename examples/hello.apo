@@ -1,0 +1,9 @@
+// hello world
+
+def main ()
+{
+    out : 'Hello World!';
+}
+
+main();
+
