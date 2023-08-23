@@ -106,7 +106,6 @@
 %token <string> CMP
 %token <string> LOP
 
-
 %right '='
 %left '+' '-'
 %left '*' '/'
@@ -121,11 +120,11 @@
 %type <string> funcdef funcdef_params func_tail_position func_tp_after f_block f_stmts f_stmt
 %type <string> return
 
-%type <string> classdef c_block c_instance
+%type <string> classdef c_instance
 
 %type <string> member_access
 
-%type <string> if nonblock_expr if_cdtblock elif
+%type <string> if nonblock_expr if_cdtblock
 %type <string> for for_three_param
 %type <string> while
 %type <string> switch swt_block swt_cases swt_case swt_x_type swt_case_block
@@ -141,7 +140,7 @@
 %type <string> lot
 
 %type <string> appobject
-%type <string> ao_language ao_parameter
+%type <string> ao_language
 
 /* Self-increasing and decreasing (s in de)
  */
@@ -167,6 +166,7 @@
 
 %start program
 
+
 %%
 
 program: stmts 
@@ -175,7 +175,7 @@ program: stmts
 		}
 	   ;
 
-preprocessing: %empty
+preprocessing: /* empty */
 			 | '#' PROGRAM ':' '\'' ident '\'' 
 			 	{
 					$$ = $5;
@@ -248,7 +248,7 @@ f_block: '{' f_stmts '}'	{ $$ = $2; }
 	   | '{' '}'			{ $$ = new string(to_string(0)); }
 	   ;
 
-swt_case_block: %empty		{ $$ = new string(to_string(0)); }
+swt_case_block: /* empty */		{ $$ = new string(to_string(0)); }
 			  | f_stmts		{ $$ = $1; }
 			  ;
 
@@ -412,7 +412,7 @@ funcdef: DEF ident '(' funcdef_params ')' func_tail_position f_block
 	apollo::fft.clear();
 };
 
-func_tail_position: %empty
+func_tail_position: /* empty */
 {
 	$$ = nullptr;
 	apollo::__ALLOC_FUNCTION_REAL_PARAMETERS = false;
@@ -444,7 +444,7 @@ access_modif ':' type
 	$$ = $2;
 };
 
-funcdef_params: %empty 
+funcdef_params: /* empty */ 
 {
 	latest_ident->what = "function";
 	$$ = new string(to_string(0)); 
@@ -836,7 +836,7 @@ NUMBER
 	$$ = new string(to_string($1));
 };
 
-call_args: %empty 
+call_args: /* empty */ 
 {
 	$$ = nullptr;
 	
@@ -1026,7 +1026,7 @@ constant_text_string: CONST_T
 text: text_fac			{ $$ = $1; }
 	| text text_fac		{ $1->append(*$2); }
 	;
-text_fac: %empty		{ $$ = new string("");  }
+text_fac: /* empty */		{ $$ = new string("");  }
 		| ident			{ $$ = $1; }
 		| numeric		{ $$ = new string(*$1); }
 		| memory_address{ $$ = new string(*$1); }
@@ -1072,7 +1072,7 @@ access_modif: ACCESSM	{ $$ = $1; }
 blank: BLK				{ $$ = $1; }
 	 ;
 
-lot: %empty			{ $$ = nullptr; }
+lot: /* empty */			{ $$ = nullptr; }
    | EOL			{ $$ = nullptr; }
    | '\t'			{ $$ = nullptr; }
    | EOL lot		{ $$ = nullptr; }
@@ -1082,7 +1082,7 @@ lot: %empty			{ $$ = nullptr; }
    ;
 
 
-appobject: %empty 
+appobject: /* empty */ 
 { 
 	$$ = nullptr;
 }| 
@@ -1241,7 +1241,7 @@ if ELSE if
 	elif_reject = false;
 };
 
-nonblock_expr: %empty 
+nonblock_expr: /* empty */ 
 {
 	/* ignore */
 } |
@@ -1265,7 +1265,7 @@ for: FOR '(' vardecl ';' expr ';' for_three_param ')' f_block
 										}
    ;
 
-for_three_param: %empty					{ $$ = new string(to_string(0)); }
+for_three_param: /* empty */					{ $$ = new string(to_string(0)); }
 			   | sinde					{ $$ = $1; }
 			   | expr					{ $$ = $1; }
 			   ;

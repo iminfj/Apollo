@@ -72,3 +72,14 @@ println('"Hello {0}{1}"', 'World', '!');
 
 println();
 
+def plus (int a, int b) -> int 
+{
+    return a + b;
+}
+
+int x = plus(23, 32);
+
+out: 'x = 23 + 32 = ' << x;
+
+// print the summary of symbol table
+exit;

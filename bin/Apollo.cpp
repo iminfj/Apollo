@@ -23,6 +23,11 @@
 # include <stdlib.h>
 # include <direct.h>
 
+# ifdef _WIN32
+# include <Windows.h>
+# else
+# include <unistd.h>
+# endif
 
 # include <apollo/Utils/HashTable.hpp>
 # include <apollo/Utils/Stack.hpp>
